@@ -1,0 +1,12 @@
+# Installed on top of the NGC PyTorch image (torch, numpy, pandas, pillow, matplotlib come with it).
+lightgbm>=4.5
+scikit-learn>=1.5
+scipy>=1.13
+pyarrow>=17
+transformers>=4.49   # SigLIP 2 support
+sentence-transformers>=3.0
+requests>=2.32
+tqdm>=4.66
+ipykernel>=6.29
+nbclient>=0.10
+nbformat>=5.10

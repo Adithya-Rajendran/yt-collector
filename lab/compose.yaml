@@ -1,0 +1,22 @@
+# GPU lab container. The repo checkout is mounted at /workspace, so `git pull`
+# on the host (or in VS Code) updates the notebooks the container sees.
+services:
+  lab:
+    build: .
+    image: yt-lab:latest
+    container_name: yt-lab
+    restart: unless-stopped
+    ipc: host
+    ulimits: {memlock: -1, stack: 67108864}
+    deploy:
+      resources:
+        reservations:
+          devices: [{driver: nvidia, count: all, capabilities: [gpu]}]
+    environment:
+      YT_DATA: /data/yt
+      HF_HOME: /root/.cache/huggingface
+    volumes:
+      - ..:/workspace
+      - ${YT_DATA_HOST:-/srv/yt-data}:/data/yt:ro
+      - ${HOME}/.cache/huggingface:/root/.cache/huggingface
+    command: sleep infinity

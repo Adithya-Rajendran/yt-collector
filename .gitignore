@@ -17,3 +17,8 @@ __pycache__/
 *.pyc
 .venv/
 *.csv
+
+# lab
+lab/.cache/
+lab/artifacts/
+.ipynb_checkpoints/

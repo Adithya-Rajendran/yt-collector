@@ -90,6 +90,31 @@ A long-lived, cross-channel dataset of view snapshots falls outside the standard
 
 This tool uses only the official API. It does not scrape YouTube pages.
 
+## Lab: GPU notebooks (`lab/`)
+
+`lab/` holds a GPU container and notebooks for modeling the collected data. The first notebook, `lab/notebooks/01_v0_baseline.ipynb`, asks how well title and thumbnail alone rank a channel's videos against that channel's own norm.
+
+- **Target:** the within-channel robust z-score of age-adjusted log views.
+- **Features:** title and format metadata, frozen `BAAI/bge-base-en-v1.5` title embeddings, and frozen SigLIP 2 NaFlex thumbnail embeddings at full size and at 168x94.
+- **Model:** LightGBM regression, plus a `lambdarank` variant.
+- **Evaluation:** within-channel Spearman correlation on held-out channels and on the newest uploads, with bootstrap CIs, compared against a title-length-plus-duration baseline.
+
+The container uses the NGC PyTorch image. `26.05-py3` (CUDA 13.2) matches a CUDA 13.2 driver; check `nvidia-smi` before raising the tag. The repo checkout is mounted at `/workspace`, so a `git pull` on the host updates the notebooks the container sees. Collected data is mounted read-only at `/data/yt`, from `/srv/yt-data` by default; override it with `YT_DATA_HOST`.
+
+```bash
+git clone https://github.com/Adithya-Rajendran/yt-collector && cd yt-collector
+docker compose -f lab/compose.yaml up -d --build
+docker exec yt-lab python lab/smoke.py            # GPU check
+```
+
+In VS Code, connect with Remote-SSH to the GPU host, open the repo, and choose "Reopen in Container" (`.devcontainer/` points at `lab/compose.yaml`). Pick the container's Python as the notebook kernel.
+
+To run headless: `docker exec yt-lab jupyter nbconvert --to notebook --execute --inplace lab/notebooks/01_v0_baseline.ipynb`. Caches and results go to `lab/.cache/` and `lab/artifacts/`, which git ignores.
+
+Environment knobs: `LAB_SAMPLE_CHANNELS`, `LAB_SKIP_IMAGES=1`, `LAB_TEXT_MODEL` and `LAB_IMAGE_MODEL`. The offline tests (`python -m unittest lab.test_ytlab`) use synthetic data from `lab/synth.py`.
+
+Thumbnails are downloaded from YouTube's image CDN for embedding. They fall under the same policy caveats as the rest of the data.
+
 ## License
 
 MIT
