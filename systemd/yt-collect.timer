@@ -1,0 +1,9 @@
+[Unit]
+Description=Run yt-collector daily, shortly after the API quota resets (midnight Pacific)
+
+[Timer]
+OnCalendar=*-*-* 00:23:00 America/Los_Angeles
+Persistent=true
+
+[Install]
+WantedBy=timers.target

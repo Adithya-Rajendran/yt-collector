@@ -1,0 +1,19 @@
+# collected data and local state
+data/
+curation/
+channels.csv
+channels.csv.*
+*.log
+
+# secrets
+key
+*.key
+*-key
+*-key.pub
+.env
+
+# python
+__pycache__/
+*.pyc
+.venv/
+*.csv

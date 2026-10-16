@@ -1,0 +1,13 @@
+[Unit]
+Description=YouTube Data API daily snapshot (yt-collector)
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Adjust both paths to where you cloned the repo and stored the key.
+WorkingDirectory=%h/yt-collector
+ExecStart=/usr/bin/python3 yt_collect.py daily --key-file %h/.config/yt/key
+Nice=10
+Environment=PYTHONUNBUFFERED=1
+TimeoutStartSec=4h
