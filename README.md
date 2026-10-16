@@ -99,7 +99,7 @@ This tool uses only the official API. It does not scrape YouTube pages.
 - **Model:** LightGBM regression, plus a `lambdarank` variant.
 - **Evaluation:** within-channel Spearman correlation on held-out channels and on the newest uploads, with bootstrap CIs, compared against a title-length-plus-duration baseline.
 
-The container uses the NGC PyTorch image. `26.05-py3` (CUDA 13.2) matches a CUDA 13.2 driver; check `nvidia-smi` before raising the tag. The repo checkout is mounted at `/workspace`, so a `git pull` on the host updates the notebooks the container sees. Collected data is mounted read-only at `/data/yt`, from `/srv/yt-data` by default; override it with `YT_DATA_HOST`.
+The container uses the NGC PyTorch image. `26.05-py3` (CUDA 13.2) matches a CUDA 13.2 driver; check `nvidia-smi` before raising the tag. The repo checkout is mounted at `/workspace`, so a `git pull` on the host updates the notebooks the container sees. Collected data is mounted read-only at `/data/yt`. By default it comes from the checkout's own `data/` folder, where the collector writes, so if the collector runs on another machine you can mirror that folder into the same path; override the source with `YT_DATA_HOST`.
 
 ```bash
 git clone https://github.com/Adithya-Rajendran/yt-collector && cd yt-collector

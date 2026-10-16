@@ -1,5 +1,7 @@
 # GPU lab container. The repo checkout is mounted at /workspace, so `git pull`
 # on the host (or in VS Code) updates the notebooks the container sees.
+# Collected data defaults to the checkout's own data/ folder (gitignored), the same
+# place the collector writes it, so a mirrored checkout on the GPU host just works.
 services:
   lab:
     build: .
@@ -17,6 +19,6 @@ services:
       HF_HOME: /root/.cache/huggingface
     volumes:
       - ..:/workspace
-      - ${YT_DATA_HOST:-/srv/yt-data}:/data/yt:ro
+      - ${YT_DATA_HOST:-../data}:/data/yt:ro
       - ${HOME}/.cache/huggingface:/root/.cache/huggingface
     command: sleep infinity
